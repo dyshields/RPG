@@ -6,6 +6,7 @@ public class AreaEntrance : MonoBehaviour {
 
     public string transitionName;
 
+    // This is a test comment for Git
     void Start()
     {
         if (transitionName == PlayerController.instance.areaTransitionName)
