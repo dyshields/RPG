@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -41,6 +42,16 @@ public class GameManager : MonoBehaviour
             AddItem("BLA");
             RemoveItem("Health Potion");
             RemoveItem("Bleep");
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            SaveData();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadData();
         }
     }
 
@@ -157,5 +168,35 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("Couldn't find " + itemToRemove);
         }
+    }
+
+    public void SaveData()
+    {
+
+        // Saves character position
+        PlayerPrefs.SetString("Current_Scene", SceneManager.GetActiveScene().name);
+        PlayerPrefs.SetFloat("Player_Position_x", PlayerController.instance.transform.position.x);
+        PlayerPrefs.SetFloat("Player_Position_y", PlayerController.instance.transform.position.y);
+        PlayerPrefs.SetFloat("Player_Position_z", PlayerController.instance.transform.position.z);
+
+        // Saves character stats
+        for(int i = 0; i < playerStats.Length; i++)
+        {
+            if(playerStats[i].gameObject.activeInHierarchy)
+            {
+                PlayerPrefs.SetInt("Player_" + playerStats[i].charName + "_active", 1);
+            } else
+            {
+                PlayerPrefs.SetInt("Player_" + playerStats[i].charName + "_active", 0);
+            }
+
+            PlayerPrefs.SetInt("Player_" + playerStats[i].charName + "_level", playerStats[i].playerLevel);
+        }
+
+    }
+
+    public void LoadData()
+    {
+        PlayerController.instance.transform.position = new Vector3(PlayerPrefs.GetFloat("Player_Position_x"), PlayerPrefs.GetFloat("Player_Position_y"), PlayerPrefs.GetFloat("Player_Position_z"));
     }
 }
