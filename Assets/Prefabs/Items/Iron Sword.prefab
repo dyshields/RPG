@@ -94,7 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isItem: 0
   isWeapon: 1
-  isArmor: 1
+  isArmor: 0
   itemName: Iron Sword
   description: Sharp!
   value: 25

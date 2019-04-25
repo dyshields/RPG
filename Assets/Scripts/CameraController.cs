@@ -13,6 +13,9 @@ public class CameraController : MonoBehaviour
     private float halfHeight;
     private float halfwidth;
 
+    public int musicToPlay;
+    private bool musicStarted;
+
     void Start()
     {
         //target = PlayerController.instance.transform;
@@ -40,6 +43,13 @@ public class CameraController : MonoBehaviour
             Mathf.Clamp(transform.position.y, bottomLeftLimit.y, topRightLimit.y),
             transform.position.z
             );
+
+        if(!musicStarted)
+        {
+            musicStarted = true;
+            AudioManager.instance.PlayMusic(musicToPlay);
+
+        }
    
     }
 }

@@ -51,15 +51,19 @@ public class Items : MonoBehaviour
                 {
                     selectedChar.currentHP = selectedChar.maxHP;
                 }
-            }
 
-            if (affectHP)
+                AudioManager.instance.PlaySFX(7);
+            }
+       
+            if (affectMP)
             {
-                selectedChar.currentHP += amountToChange;
-                if (selectedChar.currentHP > selectedChar.maxHP)
+                selectedChar.currentMP += amountToChange;
+                if (selectedChar.currentMP > selectedChar.maxMP)
                 {
-                    selectedChar.currentHP = selectedChar.maxHP;
+                    selectedChar.currentMP = selectedChar.maxMP;
                 }
+
+                AudioManager.instance.PlaySFX(6);
             }
 
             if (affectStr)
@@ -77,6 +81,8 @@ public class Items : MonoBehaviour
 
             selectedChar.equippedWeapon = itemName;
             selectedChar.weaponPower = weaponStrength;
+
+            AudioManager.instance.PlaySFX(1);
         }
 
         if (isArmor)
@@ -88,6 +94,8 @@ public class Items : MonoBehaviour
 
             selectedChar.equippedArmor = itemName;
             selectedChar.armorPower = armorStrength;
+
+            AudioManager.instance.PlaySFX(1);
         }
 
         GameManager.instance.RemoveItem(itemName);
