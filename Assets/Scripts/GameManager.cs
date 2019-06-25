@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public Items[] referenceItems;
     public int currentGold;
     public bool shopActive;
+    public bool battleActive;
 
     void Start()
     {
@@ -28,7 +29,7 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        if (gameMenuOpen || dialogActive || fadingBetweenAreas || shopActive)
+        if (gameMenuOpen || dialogActive || fadingBetweenAreas || shopActive || battleActive)
         {
             PlayerController.instance.canMove = false;
         }
