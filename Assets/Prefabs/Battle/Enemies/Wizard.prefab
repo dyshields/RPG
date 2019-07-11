@@ -103,4 +103,7 @@ MonoBehaviour:
   wpnPower: 2
   armorPower: 8
   hasDied: 0
-  movesAvailable: []
+  movesAvailable:
+  - Fire
+  - Ice
+  - Plasma

@@ -103,4 +103,6 @@ MonoBehaviour:
   wpnPower: 3
   armorPower: 3
   hasDied: 1
-  movesAvailable: []
+  movesAvailable:
+  - Slash
+  - Ice
