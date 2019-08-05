@@ -26,6 +26,10 @@ public class BattleManager : MonoBehaviour
     public Text[] playerMP;
     public GameObject targetMenu;
     public BattleTargetButton[] targetButtons;
+    public GameObject magicMenu;
+    public BattleMagicSelect[] magicButtons;
+    public BattleNotification battleNotice;
+    public int chanceToFlee = 35;
 
     void Start()
     {
@@ -323,6 +327,51 @@ public class BattleManager : MonoBehaviour
             {
                 targetButtons[i].gameObject.SetActive(false);
             }
+        }
+    }
+
+    public void OpenMagicMenu()
+    {
+        magicMenu.SetActive(true);
+
+        for(int i=0; i < magicButtons.Length; i++)
+        {
+            if(activeBattlers[currentTurn].movesAvailable.Length > i)
+            {
+                magicButtons[i].gameObject.SetActive(true);
+                magicButtons[i].spellName = activeBattlers[currentTurn].movesAvailable[i];
+                magicButtons[i].nameText.text = magicButtons[i].spellName;
+
+                for(int j=0; j < movesList.Length; j++)
+                {
+                    if(movesList[j].moveName == magicButtons[i].spellName)
+                    {
+                        magicButtons[i].spellCost = movesList[j].moveCost;
+                        magicButtons[i].costText.text = magicButtons[i].spellCost.ToString();
+                    }
+                }
+            }
+            else
+            {
+                magicButtons[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void Flee()
+    {
+        int fleeSuccess = Random.Range(0, 100);
+        if(fleeSuccess < chanceToFlee)
+        {
+            // end the battle
+            battleActive = false;
+            battleScene.SetActive(false);
+        }
+        else
+        {
+            NextTurn();
+            battleNotice.theText.text = "Couldn't escape!";
+            battleNotice.Activate();
         }
     }
 }
