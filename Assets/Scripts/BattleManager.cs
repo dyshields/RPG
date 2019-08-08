@@ -31,6 +31,7 @@ public class BattleManager : MonoBehaviour
     public BattleNotification battleNotice;
     public int chanceToFlee = 35;
 
+
     void Start()
     {
         instance = this;
@@ -156,11 +157,22 @@ public class BattleManager : MonoBehaviour
             if(activeBattlers[i].currentHP == 0)
             {
                 // Handle dead character
+                if(activeBattlers[i].isPlayer)
+                {
+                    activeBattlers[i].theSprite.sprite = activeBattlers[i].deadSprite;
+                }
+                else
+                {
+                    activeBattlers[i].EnemyFade();
+                }
+
+
             } else
             {
                 if(activeBattlers[i].isPlayer)
                 {
                     allPlayersDead = false;
+                    activeBattlers[i].theSprite.sprite = activeBattlers[i].aliveSprite;
                 }
                 else
                 {
@@ -317,7 +329,8 @@ public class BattleManager : MonoBehaviour
 
         for(int i =0; i < targetButtons.Length; i++)
         {
-            if(Enemies.Count > i)
+            // Selects from array of enemies that aren't dead; won't list dead enemies in target menu
+            if(Enemies.Count > i && activeBattlers[Enemies[i]].currentHP > 0)
             {
                 targetButtons[i].gameObject.SetActive(true);
                 targetButtons[i].moveName = moveName;

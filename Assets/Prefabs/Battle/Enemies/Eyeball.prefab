@@ -106,3 +106,7 @@ MonoBehaviour:
   movesAvailable:
   - Slash
   - Fire
+  theSprite: {fileID: 5606142723367168347}
+  deadSprite: {fileID: 0}
+  aliveSprite: {fileID: 0}
+  fadeSpeed: 1

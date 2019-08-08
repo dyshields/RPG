@@ -2725,6 +2725,7 @@ MonoBehaviour:
   - {fileID: 50866191}
   battleNotice: {fileID: 105207555}
   chanceToFlee: 35
+  fadeSpeed: 0
 --- !u!4 &47204760
 Transform:
   m_ObjectHideFlags: 0

@@ -106,3 +106,6 @@ MonoBehaviour:
   movesAvailable:
   - Fire
   - Plasma
+  theSprite: {fileID: 2094312810383528348}
+  deadSprite: {fileID: 21300098, guid: e96e2d6033059fd45a2480e54c587a95, type: 3}
+  aliveSprite: {fileID: 21300068, guid: e96e2d6033059fd45a2480e54c587a95, type: 3}
