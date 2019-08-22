@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
@@ -30,6 +31,10 @@ public class BattleManager : MonoBehaviour
     public BattleMagicSelect[] magicButtons;
     public BattleNotification battleNotice;
     public int chanceToFlee = 35;
+    private bool fleeing;
+    public string gameOverScene;
+    public int rewardXP;
+    public string[] rewardItems;
 
 
     void Start()
@@ -186,13 +191,14 @@ public class BattleManager : MonoBehaviour
             if(allEnemiesDead)
             {
                 // End battle in victory :)
+                StartCoroutine(EndBattleCo());
             } else
             {
-                // End battle in defeat :(
+                StartCoroutine(GameOverCo());
             }
-            battleScene.SetActive(false);
-            GameManager.instance.battleActive =false;
-            battleActive = false;
+            // battleScene.SetActive(false);
+            // GameManager.instance.battleActive =false;
+            // battleActive = false;
         }
         // Skips over a player or enemy turn if dead
         else
@@ -215,7 +221,6 @@ public class BattleManager : MonoBehaviour
         EnemyAttack();
         yield return new WaitForSeconds(1f);
         NextTurn();
-
     }
 
     public void EnemyAttack()
@@ -377,8 +382,10 @@ public class BattleManager : MonoBehaviour
         if(fleeSuccess < chanceToFlee)
         {
             // end the battle
-            battleActive = false;
-            battleScene.SetActive(false);
+            // battleActive = false;
+            // battleScene.SetActive(false);
+            fleeing = true;
+            StartCoroutine(EndBattleCo());
         }
         else
         {
@@ -386,5 +393,69 @@ public class BattleManager : MonoBehaviour
             battleNotice.theText.text = "Couldn't escape!";
             battleNotice.Activate();
         }
+    }
+
+    public IEnumerator EndBattleCo()
+    {
+        // Behaviors for ending a battle
+        battleActive = false;
+        uiButtonsHolder.SetActive(false);
+        targetMenu.SetActive(false);
+        magicMenu.SetActive(false);
+        // item menu > set to false
+
+        // Time delay for defeated enemies to fade out
+        yield return new WaitForSeconds(.5f);
+
+        UIFade.instance.FadeToBlack();
+
+        yield return new WaitForSeconds(1.5f);
+
+        // Player stats need to be passed to GameManager after a battle
+        for(int i = 0; i < activeBattlers.Count; i++)
+        {
+            if(activeBattlers[i].isPlayer)
+            {
+                for(int j = 0; j < GameManager.instance.playerStats.Length; j++)
+                {
+                    if(activeBattlers[i].charName == GameManager.instance.playerStats[j].charName)
+                    {
+                        GameManager.instance.playerStats[j].currentHP = activeBattlers[i].currentHP;
+                        GameManager.instance.playerStats[j].currentMP = activeBattlers[i].currentMP;
+                    }
+                }
+            }
+
+            // Characters need to be deleted in between battle scenes
+            Destroy(activeBattlers[i].gameObject);
+
+        }
+
+        UIFade.instance.FadeFromBlack();
+        battleScene.SetActive(false);
+        activeBattlers.Clear();
+        currentTurn = 0;
+        // GameManager.instance.battleActive = false;
+        if(fleeing)
+        {
+            GameManager.instance.battleActive = false;
+            fleeing = false;
+        }
+        else
+        {
+            BattleRewards.instance.OpenRewardScreen(rewardXP, rewardItems);
+        }
+
+        AudioManager.instance.PlayMusic(FindObjectOfType<CameraController>().musicToPlay);
+    }
+
+    public IEnumerator GameOverCo()
+    {
+        battleActive = false;
+        UIFade.instance.FadeToBlack();
+        yield return new WaitForSeconds(1.5f);
+        battleScene.SetActive(false);
+        SceneManager.LoadScene(gameOverScene);
+
     }
 }
